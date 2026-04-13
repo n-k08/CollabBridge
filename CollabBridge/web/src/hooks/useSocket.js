@@ -3,7 +3,11 @@ import { io } from 'socket.io-client';
 import useAuthStore from '../stores/useAuthStore';
 import useChatStore from '../stores/useChatStore';
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || (
+  typeof window !== 'undefined' && window.location.origin
+    ? window.location.origin
+    : 'http://localhost:5000'
+);
 
 let socket = null;
 

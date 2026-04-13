@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: collabbridge-server
+    runtime: node
+    buildCommand: cd server && npm install
+    startCommand: cd server && npm start
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        fromDatabase:
+          name: collabbridge
+          property: connectionString
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: CLIENT_URL
+        value: https://collabbridge-web.onrender.com
+
+  - type: web
+    name: collabbridge-web
+    runtime: node
+    buildCommand: cd web && npm install && npm run build
+    startCommand: cd web && npm run preview
+    envVars:
+      - key: VITE_API_URL
+        value: https://collabbridge-server.onrender.com
+      - key: VITE_SOCKET_URL
+        value: https://collabbridge-server.onrender.com
+
+databases:
+  - name: collabbridge
+    databaseName: collabbridge
+    user: collabbridge_user
